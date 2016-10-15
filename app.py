@@ -1,5 +1,5 @@
 #!bin/python
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from getrecipe import get_recipe
 from getdetail import get_detail
 app = Flask(__name__)
@@ -27,9 +27,11 @@ app = Flask(__name__)
 def getTasks():
     return jsonify({'tasks':tasks})
 
-@app.route('/api/<string:ing>', methods=['GET'])
-def get_task(ing):
-    obj = get_recipe(ing, 1)
+@app.route('/api', methods=['GET'])
+def get_task():
+    ing = request.args.get('ingredients')
+    page  = request.args.get('page')
+    obj = get_recipe(ing,page)
     return obj.return_recipe()
 
 @app.route('/api/details/<string:id>', methods=['GET'])
