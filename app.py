@@ -2,30 +2,20 @@
 from flask import Flask, jsonify, request
 from getrecipe import get_recipe
 from getdetail import get_detail
+from ImageRecog import get_ing
 app = Flask(__name__)
-
-# tasks = [
-#     {
-#         'id': 1,
-#         'title': u'Buy groceries',
-#         'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-#         'done': False
-#     },
-#     {
-#         'id': 2,
-#         'title': u'Learn Python',
-#         'description': u'Need to find a good Python tutorial on the web',
-#         'done': False
-#     }
-# ]
-# l = [
-#     {'a':1, 'b':2},
-#     {'c':3, 'd':4}
-# ]
 
 @app.route('/api/recipe/tasks', methods=['GET'])
 def getTasks():
     return jsonify({'tasks':tasks})
+@app.route('/api/image', methods=['GET'])
+def image_recog():
+    url = request.args.get('url')
+    page  = request.args.get('page')
+    obj = get_ing(url)
+    ing = obj.return_ing()
+    obj1 = get_recipe(ing,page)
+    return obj1.return_recipe()
 
 @app.route('/api', methods=['GET'])
 def get_task():
